@@ -1,33 +1,8 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'form-master'
-
-    publishedGroupId = 'me.riddhimanadib.form-master'
-    libraryName = 'form-master'
-    artifact = 'form-master'
-
-    libraryDescription = 'Easily build big and bigger forms with minimal effort.'
-
-    siteUrl = 'https://github.com/adib2149/FormMaster'
-    gitUrl = 'https://github.com/adib2149/FormMaster.git'
-
-    libraryVersion = '1.0.2'
-
-    developerId = 'adib2149'
-    developerName = 'Riddhiman Adib'
-    developerEmail = 'adib2149@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 16
@@ -51,6 +26,3 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
 }
-
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'
