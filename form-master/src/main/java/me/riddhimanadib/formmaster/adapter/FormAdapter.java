@@ -34,7 +34,7 @@ import me.riddhimanadib.formmaster.model.FormObject;
  * Created by Adib on 16-Apr-17.
  */
 
-public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
+public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder> {
 
     // defining marker for header view
     private int IS_HEADER_VIEW = 0;
@@ -161,13 +161,13 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @return
      */
     @Override
-    public FormAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FormAdapter.FormViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // get layout based on header or element type
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate((viewType == IS_HEADER_VIEW) ? R.layout.form_element_header : R.layout.form_element, parent, false);
 
-        ViewHolder vh = new ViewHolder(v, new FormCustomEditTextListener());
+        FormViewHolder vh = new FormViewHolder(v, new FormCustomEditTextListener());
         return vh;
     }
 
@@ -177,7 +177,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @param position
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(FormViewHolder holder, final int position) {
 
         // updates edit text listener index
         holder.mFormCustomEditTextListener.updatePosition(holder.getAdapterPosition());
@@ -195,7 +195,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
             holder.mTextViewTitle.setText(formElement.getTitle());
             holder.mEditTextValue.setText(formElement.getValueAsString());
             holder.mEditTextValue.setHint(formElement.getHint());
-            holder.mEditTextValue.setError(formElement.getError());
+            setError(holder, formElement.getError());
 
             if (formElement.isVisible()) {
                 holder.itemView.setVisibility(View.VISIBLE);
@@ -211,7 +211,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
                 case FormElement.TYPE_EDITTEXT_TEXT_MULTILINE:
                     holder.mEditTextValue.setSingleLine(false);
                     holder.mEditTextValue.setMaxLines(4);
-                  setEditTextFocusEnabled(holder);
+                    setEditTextFocusEnabled(holder);
                     break;
                 case FormElement.TYPE_EDITTEXT_NUMBER:
                     holder.mEditTextValue.setRawInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -250,10 +250,25 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
     }
 
     /**
+     * Sets mTextViewError visibility according to error
+     * @param holder
+     * @param error
+     */
+    private void setError(final FormViewHolder holder, String error) {
+        if (error == null || error.length() == 0) {
+            holder.mTextViewError.setVisibility(View.GONE);
+            return;
+        }
+
+        holder.mTextViewError.setText(error);
+        holder.mTextViewError.setVisibility(View.VISIBLE);
+    }
+
+    /**
      * brings focus when clicked on the whole container
      * @param holder
      */
-    private void setEditTextFocusEnabled(final ViewHolder holder) {
+    private void setEditTextFocusEnabled(final FormViewHolder holder) {
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +284,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @param holder
      * @param position
      */
-    private void setDatePicker(ViewHolder holder, final int position) {
+    private void setDatePicker(FormViewHolder holder, final int position) {
 
         holder.mEditTextValue.setFocusableInTouchMode(false);
         holder.mEditTextValue.setOnClickListener(new OnClickListener() {
@@ -316,7 +331,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @param holder
      * @param position
      */
-    private void setTimePicker(ViewHolder holder, final int position) {
+    private void setTimePicker(FormViewHolder holder, final int position) {
 
         holder.mEditTextValue.setFocusableInTouchMode(false);
         holder.mEditTextValue.setOnClickListener(new OnClickListener() {
@@ -360,7 +375,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @param holder
      * @param position
      */
-    private void setSingleOptionsDialog(final ViewHolder holder, final int position) {
+    private void setSingleOptionsDialog(final FormViewHolder holder, final int position) {
 
         // get the element
         final FormElement currentObj = (FormElement) mDataset.get(position);
@@ -381,6 +396,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
                         holder.mEditTextValue.setText(options[which]);
                         currentObj.setValue(currentObj.getOptions().get(which));
                         currentObj.setError(null); // Reset after value change
+                        setError(holder,null); // Reset after value change
                         notifyDataSetChanged();
                     }
                 })
@@ -401,7 +417,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * @param holder
      * @param position
      */
-    private void setMultipleOptionsDialog(final ViewHolder holder, final int position) {
+    private void setMultipleOptionsDialog(final FormViewHolder holder, final int position) {
 
         // get the element
         final FormElement currentObj = (FormElement) mDataset.get(position);
@@ -456,7 +472,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
                         }
                         holder.mEditTextValue.setText(s);
                         ((FormElement) mDataset.get(position)).setValue(s);
-                        ((FormElement) mDataset.get(position)).setError(null); // Reset after value change
+                        ((FormElement) mDataset.get(position)).setError(null);
                         notifyDataSetChanged();
                     }
                 })
@@ -480,19 +496,22 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
     /**
      * View holder class
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class FormViewHolder extends RecyclerView.ViewHolder {
 
         public AppCompatTextView mTextViewTitle;
         public AppCompatTextView mTextViewOptions;
+        public AppCompatTextView mTextViewError;
         public AppCompatEditText mEditTextValue;
         public FormCustomEditTextListener mFormCustomEditTextListener;
 
-        public ViewHolder(View v, FormCustomEditTextListener listener) {
+        public FormViewHolder(View v, FormCustomEditTextListener listener) {
             super(v);
             mTextViewTitle = (AppCompatTextView) v.findViewById(R.id.formElementTitle);
             mTextViewOptions = (AppCompatTextView) v.findViewById(R.id.formElementTitle);
+            mTextViewError = (AppCompatTextView) v.findViewById(R.id.formElementError);
             mEditTextValue = (AppCompatEditText) v.findViewById(R.id.formElementValue);
             mFormCustomEditTextListener = listener;
+            mFormCustomEditTextListener.updateViewHolder(this);
 
             if (mEditTextValue != null)
                 mEditTextValue.addTextChangedListener(mFormCustomEditTextListener);
@@ -503,7 +522,12 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
      * Text watcher for Edit texts
      */
     private class FormCustomEditTextListener implements TextWatcher {
+        private FormViewHolder formViewHolder;
         private int position;
+
+        public void updateViewHolder(FormViewHolder formViewHolder) {
+            this.formViewHolder = formViewHolder;
+        }
 
         public void updatePosition(int position) {
             this.position = position;
@@ -525,7 +549,9 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
             // trigger event only if the value is changed
             if (!currentValue.equals(newValue)) {
                 formElement.setValue(newValue);
-                formElement.setError(null); // Reset error after text change
+                formElement.setError(null);
+                setError(formViewHolder, null);
+
                 if (mListener != null)
                     mListener.onValueChanged(formElement);
             }

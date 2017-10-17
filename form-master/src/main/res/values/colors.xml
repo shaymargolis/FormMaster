@@ -4,6 +4,7 @@
     <color name="colorFormMasterHeaderText">#000000</color>
     <color name="colorFormMasterElementBackground">#FFFFFF</color>
     <color name="colorFormMasterElementTextTitle">#222222</color>
+    <color name="colorFormMasterElementErrorTitle">#FF0000</color>
     <color name="colorFormMasterElementTextValue">#000000</color>
     <color name="colorFormMasterDivider">#DDDDDD</color>
 </resources>
