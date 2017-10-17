@@ -4,13 +4,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormPickerHolder;
-import me.riddhimanadib.formmaster.model.BaseFormElement;
 import me.riddhimanadib.formmaster.model.FormPickerTimeElement;
 
 /**
@@ -19,7 +16,6 @@ import me.riddhimanadib.formmaster.model.FormPickerTimeElement;
 
 public class FormPickerTimeRenderer extends FormPickerRenderer<FormPickerTimeElement> {
     public Calendar mCalendarCurrentTime;
-    public int clickedTag = -1;
 
     public FormPickerTimeRenderer(int type, Context context, FormBuildHelper formBuilder) {
         super(type, context, formBuilder);
@@ -33,8 +29,8 @@ public class FormPickerTimeRenderer extends FormPickerRenderer<FormPickerTimeEle
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 time,
-                mCalendarCurrentTime.get(Calendar.HOUR),
-                mCalendarCurrentTime.get(Calendar.MINUTE),
+                formElement.getValue().getHourOfDay(),
+                formElement.getValue().getMinute(),
                 true);
 
         setOnClickForHolder(holder, formElement.getTag(), timePickerDialog);
@@ -43,24 +39,19 @@ public class FormPickerTimeRenderer extends FormPickerRenderer<FormPickerTimeEle
     TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            mCalendarCurrentTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            mCalendarCurrentTime.set(Calendar.MINUTE, minute);
-
-            String myFormatTime = "HH:mm"; // custom format
-            SimpleDateFormat sdfTime = new SimpleDateFormat(myFormatTime, Locale.US);
-
             // act only if clicked position is a valid index
             if (clickedTag >= 0) {
                 // get current form element, existing value and new value
-                BaseFormElement formElement = getFormBuilder().getFormElement(clickedTag);
-                String currentValue = formElement.getValue().toString();
-                String newValue = sdfTime.format(mCalendarCurrentTime.getTime());
+                FormPickerTimeElement formElement = (FormPickerTimeElement)getFormBuilder().getFormElement(clickedTag);
+                FormPickerTimeElement.TimeHolder currentValue = formElement.getValue();
+                FormPickerTimeElement.TimeHolder newValue = new FormPickerTimeElement.TimeHolder(hourOfDay, minute);
 
                 // trigger event only if the value is changed
                 if (!currentValue.equals(newValue)) {
                     formElement.setValue(newValue);
                     formElement.setError(null); // Reset after value change
                     getFormBuilder().onValueChanged(formElement);
+                    getFormBuilder().refreshView();
                 }
 
                 // change clicked position to default value

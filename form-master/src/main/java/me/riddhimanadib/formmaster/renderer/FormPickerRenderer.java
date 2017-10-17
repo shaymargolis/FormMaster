@@ -17,7 +17,7 @@ import me.riddhimanadib.formmaster.model.FormPickerElement;
  */
 
 public class FormPickerRenderer<M extends FormPickerElement> extends BaseFormRenderer<M,FormPickerHolder> {
-    private int clickedTag;
+    public int clickedTag;
     private FormBuildHelper formBuilder;
 
     public FormPickerRenderer(int type, Context context, FormBuildHelper formBuilder) {
