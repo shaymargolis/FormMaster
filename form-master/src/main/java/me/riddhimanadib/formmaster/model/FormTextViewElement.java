@@ -10,4 +10,9 @@ public class FormTextViewElement<T> extends BaseFormElement<T> {
     }
 
     public static <T> FormTextViewElement<T> createGenericInstance() { return new FormTextViewElement<T>(); }
+
+    @Override
+    public int getType() {
+        return TYPE_TEXTVIEW;
+    }
 }

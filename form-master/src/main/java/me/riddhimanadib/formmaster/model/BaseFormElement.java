@@ -23,6 +23,7 @@ public class BaseFormElement<T extends Object> implements ItemModel {
     public static final int TYPE_PICKER_TIME = 9;
     public static final int TYPE_PICKER_MULTI_CHECKBOX = 10;
     public static final int TYPE_PICKER_DROP_DOWN = 11;
+    public static final int TYPE_TEXTVIEW = 12;
 
     // private variables
     private int mTag; // unique tag to identify the object

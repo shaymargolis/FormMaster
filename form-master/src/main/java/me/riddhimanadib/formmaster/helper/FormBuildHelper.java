@@ -18,6 +18,7 @@ import me.riddhimanadib.formmaster.renderer.FormPickerDateRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerDropDownRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerMultiCheckBoxRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerTimeRenderer;
+import me.riddhimanadib.formmaster.renderer.FormTextViewRenderer;
 
 /** Wrapper class around the adapter to assist in building form
  * Created by Adib on 16-Apr-17.
@@ -75,6 +76,8 @@ public class FormBuildHelper {
         this.mFormAdapter.registerRenderer(new FormPickerMultiCheckBoxRenderer(BaseFormElement.TYPE_PICKER_MULTI_CHECKBOX, context, this));
         this.mFormAdapter.registerRenderer(new FormPickerDropDownRenderer(BaseFormElement.TYPE_PICKER_DROP_DOWN, context, this));
 
+        this.mFormAdapter.registerRenderer(new FormTextViewRenderer(BaseFormElement.TYPE_TEXTVIEW, context));
+
         this.mListener = listener;
 
         // set up the recyclerview with adapter
@@ -130,9 +133,10 @@ public class FormBuildHelper {
     }
 
     public void onValueChanged(BaseFormElement element) {
+        if (mListener == null) {
+            return;
+        }
         mListener.onValueChanged(element);
-
-
     }
 
     /**
