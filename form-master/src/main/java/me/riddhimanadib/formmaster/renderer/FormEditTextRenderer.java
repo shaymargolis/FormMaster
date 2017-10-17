@@ -77,6 +77,7 @@ public class FormEditTextRenderer extends BaseFormRenderer<FormEditTextElement, 
             public void onClick(View v) {
                 holder.mEditTextValue.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                holder.mEditTextValue.setSelection(holder.mEditTextValue.getText().length());
                 imm.showSoftInput(holder.mEditTextValue, InputMethodManager.SHOW_IMPLICIT);
             }
         });
