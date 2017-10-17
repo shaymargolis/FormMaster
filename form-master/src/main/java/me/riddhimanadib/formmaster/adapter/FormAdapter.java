@@ -380,7 +380,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
         // get the element
         final FormElement currentObj = (FormElement) mDataset.get(position);
 
-        holder.mEditTextValue.setFocusableInTouchMode(false);
+        holder.mEditTextValue.setEnabled(false);
 
         // reformat the options in format needed
         final CharSequence[] options = new CharSequence[currentObj.getOptions().size()];
@@ -410,6 +410,13 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
             }
         });
 
+        holder.mEditTextValue.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+
     }
 
     /**
@@ -422,7 +429,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
         // get the element
         final FormElement currentObj = (FormElement) mDataset.get(position);
 
-        holder.mEditTextValue.setFocusableInTouchMode(false);
+        holder.mEditTextValue.setEnabled(false);
 
         // reformat the options in format needed
         final CharSequence[] options = new CharSequence[currentObj.getOptions().size()];
@@ -486,6 +493,13 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
 
         // display the dialog on click
         holder.itemView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+
+        holder.mEditTextValue.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.show();
