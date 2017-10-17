@@ -5,6 +5,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.riddhimanadib.formmaster.adapter.FormAdapter;
@@ -100,4 +101,10 @@ public class FormBuildHelper {
         return true;
     }
 
+    /**
+     * Returns all rows stored
+     */
+    public ArrayList<FormObject> getAllObjects() {
+        return this.mFormAdapter.getAllFormObjects();
+    }
 }

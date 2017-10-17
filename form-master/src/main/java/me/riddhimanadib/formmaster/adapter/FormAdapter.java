@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +41,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
     // defining marker for header view
     private int IS_HEADER_VIEW = 0;
 
-    private List<FormObject> mDataset;
+    private ArrayList<FormObject> mDataset;
     private Context mContext;
     private Calendar mCalendarCurrentDate;
     private Calendar mCalendarCurrentTime;
@@ -129,6 +131,10 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
         }
 
         return null;
+    }
+
+    public ArrayList<FormObject> getAllFormObjects() {
+        return this.mDataset;
     }
 
     /**
@@ -394,7 +400,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
                 .setItems(options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         holder.mEditTextValue.setText(options[which]);
-                        currentObj.setValue(currentObj.getOptions().get(which));
+                        currentObj.setValue((Serializable)currentObj.getOptions().get(which));
                         currentObj.setError(null); // Reset after value change
                         setError(holder,null); // Reset after value change
                         notifyDataSetChanged();
