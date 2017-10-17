@@ -1,5 +1,7 @@
 package me.riddhimanadib.formmaster.model;
 
+import com.github.vivchar.rendererrecyclerviewadapter.ItemModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * Created by Adib on 16-Apr-17.
  */
 
-public class FormElement<T extends Object> implements FormObject {
+public class BaseFormElement<T extends Object> implements ItemModel {
 
     // different types for the form elements
     public static final int TYPE_EDITTEXT_TEXT_SINGLELINE = 1;
@@ -15,11 +17,12 @@ public class FormElement<T extends Object> implements FormObject {
     public static final int TYPE_EDITTEXT_NUMBER = 3;
     public static final int TYPE_EDITTEXT_EMAIL = 4;
     public static final int TYPE_EDITTEXT_PHONE = 5;
-    public static final int TYPE_PICKER_DATE = 6;
-    public static final int TYPE_PICKER_TIME = 7;
-    public static final int TYPE_SPINNER_DROPDOWN = 8;
-    public static final int TYPE_PICKER_MULTI_CHECKBOX = 9;
-    public static final int TYPE_EDITTEXT_PASSWORD = 10;
+    public static final int TYPE_EDITTEXT_PASSWORD = 6;
+    public static final int TYPE_EDITTEXT_AUTOCOMPLETE = 7;
+    public static final int TYPE_PICKER_DATE = 8;
+    public static final int TYPE_PICKER_TIME = 9;
+    public static final int TYPE_PICKER_MULTI_CHECKBOX = 10;
+    public static final int TYPE_PICKER_DROP_DOWN = 11;
 
     // private variables
     private int mTag; // unique tag to identify the object
@@ -33,7 +36,7 @@ public class FormElement<T extends Object> implements FormObject {
     private boolean mRequired; // value to set is the field is required
     private boolean mVisible = true;
 
-    public FormElement() {
+    public BaseFormElement() {
     }
 
     /**
@@ -41,8 +44,8 @@ public class FormElement<T extends Object> implements FormObject {
      *
      * @return
      */
-    public static FormElement<String> createInstance() {
-        return new FormElement<>();
+    public static BaseFormElement<String> createInstance() {
+        return new BaseFormElement<>();
     }
 
     /**
@@ -50,55 +53,55 @@ public class FormElement<T extends Object> implements FormObject {
      * custom generic value type
      * @return
      */
-    public static <T> FormElement<T> createGenericInstance() { return new FormElement<T>(); }
+    public static <T> BaseFormElement<T> createGenericInstance() { return new BaseFormElement<T>(); }
 
     // getters and setters
-    public FormElement<T> setTag(int mTag) {
+    public BaseFormElement<T> setTag(int mTag) {
         this.mTag = mTag;
         return this;
     }
 
-    public FormElement<T> setType(int mType) {
+    public BaseFormElement<T> setType(int mType) {
         this.mType = mType;
         return this;
     }
 
-    public FormElement<T> setTitle(String mTitle) {
+    public BaseFormElement<T> setTitle(String mTitle) {
         this.mTitle = mTitle;
         return this;
     }
 
-    public FormElement<T> setValue(T mValue) {
+    public BaseFormElement<T> setValue(T mValue) {
         this.mValue = mValue;
         return this;
     }
 
-    public FormElement<T> setHint(String mHint) {
+    public BaseFormElement<T> setHint(String mHint) {
         this.mHint = mHint;
         return this;
     }
 
-    public FormElement<T> setError(String error) {
+    public BaseFormElement<T> setError(String error) {
         this.mError = error;
         return this;
     }
 
-    public FormElement<T> setRequired(boolean required) {
+    public BaseFormElement<T> setRequired(boolean required) {
         this.mRequired = required;
         return this;
     }
 
-    public FormElement<T> setVisible(boolean visible) {
+    public BaseFormElement<T> setVisible(boolean visible) {
         this.mVisible = visible;
         return this;
     }
 
-    public FormElement<T> setOptions(List<T> mOptions) {
+    public BaseFormElement<T> setOptions(List<T> mOptions) {
         this.mOptions = mOptions;
         return this;
     }
 
-    public FormElement<T> setOptionsSelected(List<T> mOptionsSelected) {
+    public BaseFormElement<T> setOptionsSelected(List<T> mOptionsSelected) {
         this.mOptionsSelected = mOptionsSelected;
         return this;
     }
@@ -147,7 +150,6 @@ public class FormElement<T extends Object> implements FormObject {
         return (this.mOptionsSelected == null) ? new ArrayList<T>() : this.mOptionsSelected;
     }
 
-    @Override
     public boolean isHeader() {
         return false;
     }

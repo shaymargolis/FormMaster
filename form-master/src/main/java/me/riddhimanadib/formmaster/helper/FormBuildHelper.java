@@ -5,12 +5,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import me.riddhimanadib.formmaster.adapter.FormAdapter;
 import me.riddhimanadib.formmaster.listener.OnFormElementValueChangedListener;
-import me.riddhimanadib.formmaster.model.FormElement;
-import me.riddhimanadib.formmaster.model.FormObject;
+import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.renderer.FormEditTextRenderer;
+import me.riddhimanadib.formmaster.renderer.FormPickerDateRenderer;
+import me.riddhimanadib.formmaster.renderer.FormPickerDropDownRenderer;
+import me.riddhimanadib.formmaster.renderer.FormPickerMultiCheckBoxRenderer;
+import me.riddhimanadib.formmaster.renderer.FormPickerTimeRenderer;
 
 /** Wrapper class around the adapter to assist in building form
  * Created by Adib on 16-Apr-17.
@@ -18,7 +24,11 @@ import me.riddhimanadib.formmaster.model.FormObject;
 
 public class FormBuildHelper {
 
-    private FormAdapter mFormAdapter;
+    private RendererRecyclerViewAdapter mFormAdapter;
+
+    private List<BaseFormElement> mElements;
+
+    private OnFormElementValueChangedListener mListener;
 
     /**
      * constructor without listener callback for changed values
@@ -47,7 +57,22 @@ public class FormBuildHelper {
     private void initializeFormBuildHelper(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener) {
 
         // initialize form adapter
-        this.mFormAdapter = new FormAdapter(context, listener);
+        this.mElements = new ArrayList<>();
+
+        this.mFormAdapter = new RendererRecyclerViewAdapter();
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_TEXT_SINGLELINE, context, this));
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_TEXT_MULTILINE, context, this));
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_NUMBER, context, this));
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_EMAIL, context, this));
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_PHONE, context, this));
+        this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_PASSWORD, context, this));
+
+        this.mFormAdapter.registerRenderer(new FormPickerDateRenderer(BaseFormElement.TYPE_PICKER_DATE, context, this));
+        this.mFormAdapter.registerRenderer(new FormPickerTimeRenderer(BaseFormElement.TYPE_PICKER_TIME, context, this));
+        this.mFormAdapter.registerRenderer(new FormPickerMultiCheckBoxRenderer(BaseFormElement.TYPE_PICKER_MULTI_CHECKBOX, context, this));
+        this.mFormAdapter.registerRenderer(new FormPickerDropDownRenderer(BaseFormElement.TYPE_PICKER_DROP_DOWN, context, this));
+
+        this.mListener = listener;
 
         // set up the recyclerview with adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -64,8 +89,9 @@ public class FormBuildHelper {
      * add list of form elements to be shown
      * @param formElements
      */
-    public void addFormElements(List<FormObject> formElements) {
-        this.mFormAdapter.addElements(formElements);
+    public void addFormElements(List<BaseFormElement> formElements) {
+        this.mElements.addAll(formElements);
+        this.mFormAdapter.setItems(this.mElements);
     }
 
     /**
@@ -80,8 +106,30 @@ public class FormBuildHelper {
      * @param tag
      * @return
      */
-    public FormElement getFormElement(int tag) {
-        return this.mFormAdapter.getValueAtTag(tag);
+    public BaseFormElement getFormElement(int tag) {
+        for (BaseFormElement i : this.mElements) {
+            if (i.isHeader())
+                continue;
+
+            if (i.getTag() == tag)
+                return i;
+        }
+
+        return null;
+    }
+
+    public BaseFormElement getElementAtIndex(int index) {
+        if (this.mElements.get(index) instanceof BaseFormElement) {
+            return this.mElements.get(index);
+        }
+
+        return null;
+    }
+
+    public void onValueChanged(BaseFormElement element) {
+        mListener.onValueChanged(element);
+
+
     }
 
     /**
@@ -92,7 +140,7 @@ public class FormBuildHelper {
      */
     public boolean isValidForm() {
         for (int i = 0; i < this.mFormAdapter.getItemCount(); i++) {
-            FormElement formElement = this.mFormAdapter.getValueAtIndex(i);
+            BaseFormElement formElement = this.getElementAtIndex(i);
             if (formElement.isHeader() == false & formElement.isRequired() & formElement.getValue().toString().trim().isEmpty()) {
                 return false;
             }
@@ -103,7 +151,7 @@ public class FormBuildHelper {
     /**
      * Returns all rows stored
      */
-    public List<FormObject> getAllObjects() {
-        return this.mFormAdapter.getAllFormObjects();
+    public List<BaseFormElement> getAllObjects() {
+        return this.mElements;
     }
 }
