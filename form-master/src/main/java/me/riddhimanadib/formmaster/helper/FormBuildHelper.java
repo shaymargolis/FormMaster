@@ -12,6 +12,7 @@ import java.util.List;
 
 import me.riddhimanadib.formmaster.listener.OnFormElementValueChangedListener;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.renderer.FormAutoCompleteRenderer;
 import me.riddhimanadib.formmaster.renderer.FormEditTextRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerDateRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerDropDownRenderer;
@@ -66,6 +67,8 @@ public class FormBuildHelper {
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_EMAIL, context, this));
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_PHONE, context, this));
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_PASSWORD, context, this));
+
+        this.mFormAdapter.registerRenderer(new FormAutoCompleteRenderer(BaseFormElement.TYPE_EDITTEXT_AUTOCOMPLETE, context, this));
 
         this.mFormAdapter.registerRenderer(new FormPickerDateRenderer(BaseFormElement.TYPE_PICKER_DATE, context, this));
         this.mFormAdapter.registerRenderer(new FormPickerTimeRenderer(BaseFormElement.TYPE_PICKER_TIME, context, this));
