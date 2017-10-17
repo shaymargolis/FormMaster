@@ -131,6 +131,10 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.FormViewHolder
         return null;
     }
 
+    public List<FormObject> getAllFormObjects() {
+        return this.mDataset;
+    }
+
     /**
      * gets total item count
      * @return

@@ -100,4 +100,10 @@ public class FormBuildHelper {
         return true;
     }
 
+    /**
+     * Returns all rows stored
+     */
+    public List<FormObject> getAllObjects() {
+        return this.mFormAdapter.getAllFormObjects();
+    }
 }
