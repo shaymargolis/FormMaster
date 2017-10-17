@@ -33,7 +33,9 @@ public class FormAutoCompleteRenderer extends BaseFormRenderer<FormAutoCompleteE
         super.bindView(formElement, holder);
 
         holder.mFormCustomEditTextListener.updateTag(formElement.getTag());
-        if (holder.mEditTextValue.getText().toString().length() == 0) { // Only set textValue on empty values
+        if (!formElement.getValueAsString().equals(formElement.getTypedString())) { // If the typedString is not one of the values, keep it
+            holder.mEditTextValue.setText(formElement.getTypedString());
+        } else {
             holder.mEditTextValue.setText(formElement.getValueAsString());
         }
         holder.mEditTextValue.setHint(formElement.getHint());
@@ -101,6 +103,8 @@ public class FormAutoCompleteRenderer extends BaseFormRenderer<FormAutoCompleteE
             // get current form element, existing value and new value
             FormAutoCompleteElement formElement = (FormAutoCompleteElement)formBuilder.getFormElement(tag);
             String newValue = charSequence.toString();
+
+            formElement.setTypedString(newValue);
 
             // trigger only if the value exists as one of the string options
             if (formElement.getStringOptions().contains(newValue)) {

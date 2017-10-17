@@ -9,6 +9,15 @@ import java.util.Set;
  */
 
 public class FormAutoCompleteElement<T> extends BaseFormElement<T> {
+    /**
+     * Because the written text in the EditText not always matched the
+     * Values in options array, we keep the TypedString: what the user typed.
+     */
+    private String mTypedString;
+    /**
+     * To determine what strings can be typed, we keep a set of the options
+     * converted to strings
+     */
     private Set<String> mStringOptions;
 
     public static FormAutoCompleteElement<String> createInstance() {
@@ -34,5 +43,13 @@ public class FormAutoCompleteElement<T> extends BaseFormElement<T> {
 
     public Set<String> getStringOptions() {
         return (mStringOptions != null) ? mStringOptions : new HashSet<String>();
+    }
+
+    public String getTypedString() {
+        return this.mTypedString;
+    }
+
+    public void setTypedString(String typedString) {
+        this.mTypedString = typedString;
     }
 }
