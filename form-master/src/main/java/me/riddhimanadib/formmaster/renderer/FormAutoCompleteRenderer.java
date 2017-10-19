@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 
+import java.io.Serializable;
+
 import me.riddhimanadib.formmaster.R;
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormAutoCompleteHolder;
+import me.riddhimanadib.formmaster.model.BaseFormElement;
 import me.riddhimanadib.formmaster.model.FormAutoCompleteElement;
 
 /**
@@ -97,6 +100,16 @@ public class FormAutoCompleteRenderer extends BaseFormRenderer<FormAutoCompleteE
 
         }
 
+        public Object getElementWithString(BaseFormElement element, String stringVal) {
+            for (Object i : element.getOptions()) {
+                if (i.toString().equals(stringVal)) {
+                    return i;
+                }
+            }
+
+            return null;
+        }
+
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
@@ -108,7 +121,7 @@ public class FormAutoCompleteRenderer extends BaseFormRenderer<FormAutoCompleteE
 
             // trigger only if the value exists as one of the string options
             if (formElement.getStringOptions().contains(newValue)) {
-                formElement.setValue(newValue);
+                formElement.setValue((Serializable)getElementWithString(formElement, newValue));
                 formElement.setError(null);
                 setError(formViewHolder, null);
 

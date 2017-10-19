@@ -28,35 +28,32 @@ public class FormBuildHelper {
 
     private RendererRecyclerViewAdapter mFormAdapter;
 
-    private List<BaseFormElement> mElements;
+    private ArrayList<BaseFormElement> mElements;
 
     private OnFormElementValueChangedListener mListener;
 
     /**
      * constructor without listener callback for changed values
      * @param context
-     * @param recyclerView
      */
-    public FormBuildHelper(Context context, RecyclerView recyclerView) {
-        initializeFormBuildHelper(context, recyclerView, null);
+    public FormBuildHelper(Context context) {
+        initializeFormBuildHelper(context, null);
     }
 
     /**
      * constructor with listener callback for changed values
      * @param context
-     * @param recyclerView
      */
-    public FormBuildHelper(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener) {
-        initializeFormBuildHelper(context, recyclerView, listener);
+    public FormBuildHelper(Context context, OnFormElementValueChangedListener listener) {
+        initializeFormBuildHelper(context, listener);
     }
 
     /**
      * private method for initializing form build helper
      * @param context
-     * @param recyclerView
      * @param listener
      */
-    private void initializeFormBuildHelper(Context context, RecyclerView recyclerView, OnFormElementValueChangedListener listener) {
+    private void initializeFormBuildHelper(Context context, OnFormElementValueChangedListener listener) {
 
         // initialize form adapter
         this.mElements = new ArrayList<>();
@@ -79,6 +76,12 @@ public class FormBuildHelper {
         this.mFormAdapter.registerRenderer(new FormTextViewRenderer(BaseFormElement.TYPE_TEXTVIEW, context));
 
         this.mListener = listener;
+    }
+
+    public void attachRecyclerView(Context context, RecyclerView recyclerView) {
+        if (recyclerView == null) {
+            return;
+        }
 
         // set up the recyclerview with adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -88,7 +91,6 @@ public class FormBuildHelper {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(mFormAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
     }
 
     /**
@@ -158,7 +160,7 @@ public class FormBuildHelper {
     /**
      * Returns all rows stored
      */
-    public List<BaseFormElement> getAllObjects() {
+    public ArrayList<BaseFormElement> getAllObjects() {
         return this.mElements;
     }
 }

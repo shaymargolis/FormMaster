@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import java.io.Serializable;
+
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormPickerHolder;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
@@ -42,7 +44,7 @@ public class FormPickerDropDownRenderer extends FormPickerRenderer<FormPickerDro
                     public void onClick(DialogInterface dialog, int which) {
                         holder.mEditTextValue.setText(options[which]);
                         BaseFormElement element = getFormBuilder().getFormElement(tag);
-                        element.setValue(currentObj.getOptions().get(which));
+                        element.setValue((Serializable)currentObj.getOptions().get(which));
                         element.setError(null); // Reset after value change
                         setError(holder,null); // Reset after value change
                         getFormBuilder().refreshView();

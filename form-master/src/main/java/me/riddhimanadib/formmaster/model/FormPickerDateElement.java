@@ -1,11 +1,15 @@
 package me.riddhimanadib.formmaster.model;
 
+import android.os.Parcel;
+
+import java.io.Serializable;
+
 /**
  * Created by shaymargolis on 17/10/2017.
  */
 
 public class FormPickerDateElement extends FormPickerElement<FormPickerDateElement.DateHolder> {
-    public static class DateHolder {
+    public static class DateHolder implements Serializable {
         private int year;
         private int month;
         private int dayOfMonth;
@@ -46,4 +50,35 @@ public class FormPickerDateElement extends FormPickerElement<FormPickerDateEleme
     public int getType() {
         return TYPE_PICKER_DATE;
     }
+
+    /**
+     * Parcelable boilerplate
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+    }
+
+    public FormPickerDateElement() {
+    }
+
+    protected FormPickerDateElement(Parcel in) {
+    }
+
+    public static final Creator<FormPickerDateElement> CREATOR = new Creator<FormPickerDateElement>() {
+        @Override
+        public FormPickerDateElement createFromParcel(Parcel source) {
+            return new FormPickerDateElement(source);
+        }
+
+        @Override
+        public FormPickerDateElement[] newArray(int size) {
+            return new FormPickerDateElement[size];
+        }
+    };
 }

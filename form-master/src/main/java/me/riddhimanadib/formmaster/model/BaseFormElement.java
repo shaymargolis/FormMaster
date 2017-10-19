@@ -1,7 +1,11 @@
 package me.riddhimanadib.formmaster.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.github.vivchar.rendererrecyclerviewadapter.ItemModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +13,7 @@ import java.util.List;
  * Created by Adib on 16-Apr-17.
  */
 
-public class BaseFormElement<T extends Object> implements ItemModel {
+public class BaseFormElement<T extends Serializable> implements ItemModel, Parcelable {
 
     // different types for the form elements
     public static final int TYPE_EDITTEXT_TEXT_SINGLELINE = 1;
@@ -54,7 +58,7 @@ public class BaseFormElement<T extends Object> implements ItemModel {
      * custom generic value type
      * @return
      */
-    public static <T> BaseFormElement<T> createGenericInstance() { return new BaseFormElement<T>(); }
+    public static <T extends Serializable> BaseFormElement<T> createGenericInstance() { return new BaseFormElement<T>(); }
 
     // getters and setters
     public BaseFormElement<T> setTag(int mTag) {
@@ -160,4 +164,102 @@ public class BaseFormElement<T extends Object> implements ItemModel {
         return "TAG: " + String.valueOf(this.mTag) + ", TITLE: " + this.mTitle + ", VALUE: " + this.mValue + ", REQUIRED: " + String.valueOf(this.mRequired);
     }
 
+    /**
+     * Parcelable boilerplate
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mTag);
+        dest.writeInt(this.mType);
+        dest.writeString(this.mTitle);
+        dest.writeSerializable(this.mValue);
+
+        /**
+         * We need special method to store array of generic objects
+         * more here: https://stackoverflow.com/a/31979348/3625638
+         */
+
+        // mOptions
+        if (mOptions == null || mOptions.size() == 0) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(mOptions.size());
+
+            final Class<?> objectsType = mOptions.get(0).getClass();
+            dest.writeSerializable(objectsType);
+            dest.writeList(mOptions);
+        }
+
+        // mOptionsSelected
+        if (mOptionsSelected == null || mOptionsSelected.size() == 0) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(mOptionsSelected.size());
+
+            final Class<?> objectsType = mOptionsSelected.get(0).getClass();
+            dest.writeSerializable(objectsType);
+            dest.writeList(mOptionsSelected);
+        }
+
+        dest.writeString(this.mHint);
+        dest.writeString(this.mError);
+        dest.writeByte(this.mRequired ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mVisible ? (byte) 1 : (byte) 0);
+    }
+
+    protected BaseFormElement(Parcel in) {
+        this.mTag = in.readInt();
+        this.mType = in.readInt();
+        this.mTitle = in.readString();
+        this.mValue = (T) in.readSerializable();
+
+        /**
+         * We need special method to store array of generic objects
+         * more here: https://stackoverflow.com/a/31979348/3625638
+         */
+
+        // mOptions
+        int optionSize = in.readInt();
+        if (optionSize == 0) {
+            mOptions = null;
+        } else {
+            Class<?> type = (Class<?>) in.readSerializable();
+
+            mOptions = new ArrayList<>(optionSize);
+            in.readList(mOptions, type.getClassLoader());
+        }
+
+        // mOptionsSelected
+        int selectedOptionSize = in.readInt();
+        if (selectedOptionSize == 0) {
+            mOptionsSelected = null;
+        } else {
+            Class<?> type = (Class<?>) in.readSerializable();
+
+            mOptionsSelected = new ArrayList<>(selectedOptionSize);
+            in.readList(mOptionsSelected, type.getClassLoader());
+        }
+
+        this.mHint = in.readString();
+        this.mError = in.readString();
+        this.mRequired = in.readByte() != 0;
+        this.mVisible = in.readByte() != 0;
+    }
+
+    public static final Creator<BaseFormElement> CREATOR = new Creator<BaseFormElement>() {
+        @Override
+        public BaseFormElement createFromParcel(Parcel source) {
+            return new BaseFormElement(source);
+        }
+
+        @Override
+        public BaseFormElement[] newArray(int size) {
+            return new BaseFormElement[size];
+        }
+    };
 }

@@ -1,11 +1,15 @@
 package me.riddhimanadib.formmaster.model;
 
+import android.os.Parcel;
+
+import java.io.Serializable;
+
 /**
  * Created by shaymargolis on 17/10/2017.
  */
 
 public class FormPickerTimeElement extends FormPickerElement<FormPickerTimeElement.TimeHolder> {
-    public static class TimeHolder {
+    public static class TimeHolder implements Serializable {
         private int hourOfDay;
         private int minute;
 
@@ -39,4 +43,37 @@ public class FormPickerTimeElement extends FormPickerElement<FormPickerTimeEleme
     public int getType() {
         return TYPE_PICKER_TIME;
     }
+
+    /**
+     * Parcelable boilerplate
+     */
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+    }
+
+    public FormPickerTimeElement() {
+    }
+
+    protected FormPickerTimeElement(Parcel in) {
+        super(in);
+    }
+
+    public static final Creator<FormPickerTimeElement> CREATOR = new Creator<FormPickerTimeElement>() {
+        @Override
+        public FormPickerTimeElement createFromParcel(Parcel source) {
+            return new FormPickerTimeElement(source);
+        }
+
+        @Override
+        public FormPickerTimeElement[] newArray(int size) {
+            return new FormPickerTimeElement[size];
+        }
+    };
 }
