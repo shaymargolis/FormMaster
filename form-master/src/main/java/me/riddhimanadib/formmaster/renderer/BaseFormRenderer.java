@@ -2,6 +2,7 @@ package me.riddhimanadib.formmaster.renderer;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.vivchar.rendererrecyclerviewadapter.ViewRenderer;
 
@@ -25,8 +26,10 @@ public abstract class BaseFormRenderer<M extends BaseFormElement, VH extends Bas
 
         if (formElement.isVisible()) {
             holder.itemView.setVisibility(View.VISIBLE);
+            holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0));
         }
     }
 
