@@ -47,6 +47,7 @@ public class FormPickerDropDownRenderer extends FormPickerRenderer<FormPickerDro
                         element.setValue((Serializable)currentObj.getOptions().get(which));
                         element.setError(null); // Reset after value change
                         setError(holder,null); // Reset after value change
+                        getFormBuilder().onValueChanged(element);
                         getFormBuilder().refreshView();
                     }
                 })

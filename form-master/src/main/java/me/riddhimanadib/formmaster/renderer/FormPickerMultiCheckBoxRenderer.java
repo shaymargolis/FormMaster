@@ -81,6 +81,7 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
                         BaseFormElement element = getFormBuilder().getFormElement(tag);
                         element.setValue(s);
                         element.setError(null);
+                        getFormBuilder().onValueChanged(element);
                         getFormBuilder().refreshView();
                     }
                 })
