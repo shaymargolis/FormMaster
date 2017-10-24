@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormPickerHolder;
@@ -48,6 +49,17 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
             }
         }
 
+        String s = "";
+        for (int i = 0; i < mSelectedItems.size(); i++) {
+            s += options[mSelectedItems.get(i)];
+
+            if (i < mSelectedItems.size() - 1) {
+                s += ", ";
+            }
+        }
+
+        holder.mEditTextValue.setText(s);
+
         // prepare the dialog
         final AlertDialog dialog  = new AlertDialog.Builder(getContext())
                 .setTitle("Pick one or more")
@@ -69,17 +81,15 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
                 .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        String s = "";
-                        for (int i = 0; i < mSelectedItems.size(); i++) {
-                            s += options[mSelectedItems.get(i)];
-
-                            if (i < mSelectedItems.size() - 1) {
-                                s += ", ";
-                            }
-                        }
-                        holder.mEditTextValue.setText(s);
                         BaseFormElement element = getFormBuilder().getFormElement(tag);
-                        element.setValue(s);
+
+                        List<Object> selectedOptions = new ArrayList<>();
+                        for (int i = 0; i < mSelectedItems.size(); i++) {
+                            Integer index = mSelectedItems.get(i);
+                            selectedOptions.add(element.getOptions().get(index));
+                        }
+
+                        element.setOptionsSelected(selectedOptions);
                         element.setError(null);
                         getFormBuilder().onValueChanged(element);
                         getFormBuilder().refreshView();
