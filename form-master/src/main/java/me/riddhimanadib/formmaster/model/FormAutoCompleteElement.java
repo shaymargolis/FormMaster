@@ -35,6 +35,13 @@ public class FormAutoCompleteElement<T extends Serializable> extends BaseFormEle
     }
 
     @Override
+    public BaseFormElement<T> setValue(T mValue) {
+        mTypedString = mValue.toString();
+
+        return super.setValue(mValue);
+    }
+
+    @Override
     public FormAutoCompleteElement<T> setOptions(List<T> mOptions) {
         super.setOptions(mOptions);
         mStringOptions = new HashSet<>();
