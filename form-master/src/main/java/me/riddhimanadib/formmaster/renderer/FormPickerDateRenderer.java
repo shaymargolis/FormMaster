@@ -47,7 +47,7 @@ public class FormPickerDateRenderer extends FormPickerRenderer<FormPickerDateEle
                 // get current form element, existing value and new value
                 FormPickerDateElement formElement = (FormPickerDateElement)getFormBuilder().getFormElement(clickedTag);
                 FormPickerDateElement.DateHolder currentValue = formElement.getValue();
-                FormPickerDateElement.DateHolder newValue = new FormPickerDateElement.DateHolder(dayOfMonth, monthOfYear, year);
+                FormPickerDateElement.DateHolder newValue = new FormPickerDateElement.DateHolder(dayOfMonth, monthOfYear+1, year);
 
                 // trigger event only if the value is changed
                 if (!currentValue.equals(newValue)) {
