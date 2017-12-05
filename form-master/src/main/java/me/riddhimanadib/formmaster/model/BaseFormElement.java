@@ -16,6 +16,7 @@ import java.util.List;
 public class BaseFormElement<T extends Serializable> implements ItemModel, Parcelable {
 
     // different types for the form elements
+    public static final int TYPE_HEADER = 0;
     public static final int TYPE_EDITTEXT_TEXT_SINGLELINE = 1;
     public static final int TYPE_EDITTEXT_TEXT_MULTILINE = 2;
     public static final int TYPE_EDITTEXT_NUMBER = 3;

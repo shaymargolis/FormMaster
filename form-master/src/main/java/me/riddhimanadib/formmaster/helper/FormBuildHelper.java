@@ -6,14 +6,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.github.vivchar.rendererrecyclerviewadapter.RendererRecyclerViewAdapter;
+import com.github.vivchar.rendererrecyclerviewadapter.ViewRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.riddhimanadib.formmaster.listener.OnFormElementValueChangedListener;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
+import me.riddhimanadib.formmaster.model.FormHeader;
 import me.riddhimanadib.formmaster.renderer.FormAutoCompleteRenderer;
 import me.riddhimanadib.formmaster.renderer.FormEditTextRenderer;
+import me.riddhimanadib.formmaster.renderer.FormHeaderRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerDateRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerDropDownRenderer;
 import me.riddhimanadib.formmaster.renderer.FormPickerMultiCheckBoxRenderer;
@@ -59,6 +62,8 @@ public class FormBuildHelper {
         this.mElements = new ArrayList<>();
 
         this.mFormAdapter = new RendererRecyclerViewAdapter();
+        this.mFormAdapter.registerRenderer(new FormHeaderRenderer(BaseFormElement.TYPE_HEADER, context));
+
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_TEXT_SINGLELINE, context, this));
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_TEXT_MULTILINE, context, this));
         this.mFormAdapter.registerRenderer(new FormEditTextRenderer(BaseFormElement.TYPE_EDITTEXT_NUMBER, context, this));
@@ -76,6 +81,10 @@ public class FormBuildHelper {
         this.mFormAdapter.registerRenderer(new FormTextViewRenderer(BaseFormElement.TYPE_TEXTVIEW, context));
 
         this.mListener = listener;
+    }
+
+    public void registerRenderer(ViewRenderer r) {
+        this.mFormAdapter.registerRenderer(r);
     }
 
     public void attachRecyclerView(Context context, RecyclerView recyclerView) {

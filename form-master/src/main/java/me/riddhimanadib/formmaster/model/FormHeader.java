@@ -24,6 +24,11 @@ public class FormHeader extends BaseFormElement<String> {
     }
 
     @Override
+    public int getType() {
+        return TYPE_HEADER;
+    }
+
+    @Override
     public boolean isHeader() {
         return true;
     }
