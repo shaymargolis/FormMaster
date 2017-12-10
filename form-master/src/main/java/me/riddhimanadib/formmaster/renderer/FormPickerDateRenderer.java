@@ -31,7 +31,7 @@ public class FormPickerDateRenderer extends FormPickerRenderer<FormPickerDateEle
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                 date,
                 formElement.getValue().getYear(),
-                formElement.getValue().getMonth(),
+                formElement.getValue().getMonth()-1,
                 formElement.getValue().getDayOfMonth());
 
         // TODO: this could be used to set a minimum date
