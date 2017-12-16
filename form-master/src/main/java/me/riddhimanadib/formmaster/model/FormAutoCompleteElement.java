@@ -36,7 +36,9 @@ public class FormAutoCompleteElement<T extends Serializable> extends BaseFormEle
 
     @Override
     public BaseFormElement<T> setValue(T mValue) {
-        if (mValue != null) {
+        if (mValue == null) {
+            mTypedString = null;
+        } else {
             mTypedString = mValue.toString();
         }
 
