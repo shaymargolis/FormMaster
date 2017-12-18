@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.riddhimanadib.formmaster.R;
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormPickerHolder;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
@@ -62,7 +63,7 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
 
         // prepare the dialog
         final AlertDialog dialog  = new AlertDialog.Builder(getContext())
-                .setTitle("Pick one or more")
+                .setTitle(R.string.form_master_pick_one_or_more)
                 .setMultiChoiceItems(options, optionsSelected,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
@@ -78,7 +79,7 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
                             }
                         })
                 // Set the action buttons
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.form_master_okay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         BaseFormElement element = getFormBuilder().getFormElement(tag);
@@ -95,7 +96,7 @@ public class FormPickerMultiCheckBoxRenderer extends FormPickerRenderer<FormPick
                         getFormBuilder().refreshView();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.form_master_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.Serializable;
 
+import me.riddhimanadib.formmaster.R;
 import me.riddhimanadib.formmaster.helper.FormBuildHelper;
 import me.riddhimanadib.formmaster.holder.FormPickerHolder;
 import me.riddhimanadib.formmaster.model.BaseFormElement;
@@ -39,7 +40,7 @@ public class FormPickerDropDownRenderer extends FormPickerRenderer<FormPickerDro
 
         // prepare the dialog
         final AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle("Pick one")
+                .setTitle(R.string.form_master_pick_one)
                 .setItems(options, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         holder.mEditTextValue.setText(options[which]);
