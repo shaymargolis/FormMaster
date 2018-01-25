@@ -119,8 +119,9 @@ public class FormAutoCompleteRenderer extends BaseFormRenderer<FormAutoCompleteE
 
             formElement.setTypedString(newValue);
 
-            // trigger only if the value exists as one of the string options
-            if (formElement.getStringOptions().contains(newValue)) {
+            // trigger only if the value exists as one of the string options,
+            // and if the string was changed.
+            if (formElement.getStringOptions().contains(newValue) && !newValue.equals(formElement.getValueAsString())) {
                 formElement.setValue((Serializable)getElementWithString(formElement, newValue));
                 formElement.setError(null);
                 setError(formViewHolder, null);
